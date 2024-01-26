@@ -5,14 +5,17 @@ WIP non-standard, typed superset of [RFC
 
 ## Implementation Status
 
-[x]Level 1
-[]Level 2
-[]Level 3
-[]Level 4
+- [ ] Level 1
+
+- [ ] Level 2
+
+- [ ] Level 3
+
+- [ ] Level 4
 
 ## Usage
 
-```
+```typescript
 // Re-open and extend VariableTypes interface with custom types. Comes with // string, boolean, and number by default
 
 namespace 'ts-uri-tempalte' {
@@ -22,7 +25,7 @@ namespace 'ts-uri-tempalte' {
 }
 ```
 
-```
+```typescript
 // Create a supported RFC-6570 URI literal, except you can specify parameter// types by enclosing the key you inscribed in `VariableTypes` after the
 // variable name
 import type { URITemplateVars } from 'ts-uri-template'
