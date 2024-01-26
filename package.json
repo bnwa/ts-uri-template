@@ -1,0 +1,15 @@
+{
+  "name": "ts-uri-template",
+  "module": "index.ts",
+  "type": "module",
+  "author": {
+    "name": "Benoit Barberousse",
+    "email": "74591246+bnwa@users.noreply.github.com"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
