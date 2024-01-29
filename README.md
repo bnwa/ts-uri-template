@@ -59,5 +59,5 @@ const expanded = expand(uri, { version: "2.2.2", author: "somebody" })
 // Parse errors are caught at the type level
 // Result will evaluate to:
 // { _err: true } & "Encountered reserved character ')' before parsing '(' character -> ')}'"
-type Result = URITemplateVars<typeof "http://example.com/api/things/{thing)}
+type Result = URITemplateVars<typeof "http://example.com/api/things/{thing)}">
 ```
