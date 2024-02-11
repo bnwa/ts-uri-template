@@ -3,7 +3,6 @@
 export interface VarTypes {
   ['boolean']: boolean
   ['uuid']: string
-  ['list']: Array<string>
 }
 
 // RFC 6570 types
@@ -142,3 +141,67 @@ type ParseLiteral<Str extends string, Acc = {}> =
 
 export type URITemplateVars<URI extends string> =
   ParseLiteral<URI>
+
+export type URIGlobVars<URI extends string, Vars = URITemplateVars<URI>> =
+  { [ K in keyof Vars]?: Vars[K] | '**/' | '/**' }
+
+export function expand<URI extends string>(uri: URI, vars: URITemplateVars<typeof uri>) : string {
+  const map = vars as { [index: string]: VarTypes[keyof VarTypes] | undefined}
+  let result = "", key = "", inVar = false, inType = false, char = "", i = 0
+  while((char = uri[i]) != null) {
+    switch(char) {
+      case '{':
+        inVar = true
+        continue
+      case '}':
+        inVar = false
+        const value = map[key]
+        if (value) result += value
+        else throw new Error(`Encountered unpopulated variable '${key}' in '${uri}'`)
+        continue
+      case '(':
+        inType = true
+        continue
+      case ')':
+        inType = false
+        continue
+      default:
+        if (inVar) key += char
+        else result += char
+    }
+  }
+  return result
+}
+
+export function glob<URI extends string>(uri: URI, vars: URIGlobVars<typeof uri>) : string {
+  const map = vars as Partial<{ [index: string]: VarTypes[keyof VarTypes] | '**/' | '/**' }>
+  let result = "", char = "", key = "", inVar = false, inType = false, i = 0
+  while((char = uri[i++]) != null) {
+    switch(char) {
+      case '{':
+        inVar = true
+        continue
+      case '}':
+        inVar = false
+        const value = map[key]
+        if (value && value === '**/') result = '**'
+        else if (value && value === '/**') return result += '**'
+        else if (value) result += value
+        else result += '*'
+        continue
+      case '(':
+        inType = true
+        continue
+      case ')':
+        inType = false
+        continue
+      case '?':
+        return result += '?**'
+      default:
+        if (inVar) key += char
+        else if (inType) continue
+        else result += char
+    }
+  }
+  return result
+}
